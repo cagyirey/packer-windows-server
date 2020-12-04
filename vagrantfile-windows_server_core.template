@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 # TODO: i don't actually know what version this requires
-Vagrant.require_version ">= 1.6.2"
+Vagrant.require_version ">= 1.8"
 
 Vagrant.configure("2") do |config|
   config.vm.box = "windows-server-vagrant"
@@ -30,7 +30,7 @@ Vagrant.configure("2") do |config|
   # We can't assume the location of the installed box (can we?) so here's our hack
   config.vm.provision :shell,
     path: "https://raw.githubusercontent.com/cagyirey/packer-windows-server/main/scripts/create-machine.ps1",
-    args: "-HostHome #{home} -MachineName windows-server-docker -Hostname {{ user `hostname` }}"
+    args: "-HostHome #{home} -MachineName windows-server-docker -Hostname {{ user `hostname` }}",
     sha512: "2b207df36897824c5110414fbf69998231eb7bc3587331f55af2b0586af523cd6df224243522964ff7ac93791ea2006c0abaa4b0dc1261d7b988d6231dbdf6c7"
 
   config.vm.provision :docker do |d|
@@ -40,7 +40,7 @@ Vagrant.configure("2") do |config|
   config.trigger.before :destroy do |trigger|
     trigger.run_remote = { 
       path: "https://raw.githubusercontent.com/cagyirey/packer-windows-server/main/scripts/create-machine.ps1",
-      args: "-Clean"
+      args: "-Clean",
       sha512: "2b207df36897824c5110414fbf69998231eb7bc3587331f55af2b0586af523cd6df224243522964ff7ac93791ea2006c0abaa4b0dc1261d7b988d6231dbdf6c7"
     }
   end
