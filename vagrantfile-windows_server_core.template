@@ -1,0 +1,102 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# TODO: i don't actually know what version this requires
+Vagrant.require_version ">= 1.6.2"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "windows-server-vagrant"
+  config.vm.hostname = "{{ user `hostname` }}"
+  config.vm.communicator = :winrm
+  config.vm.guest = :windows
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+ 
+  config.winrm.username = "vagrant"
+  config.winrm.password = "vagrant"
+  config.winrm.transport = :ssl
+  config.winrm.ssl_peer_verification = false
+
+  config.windows.halt_timeout = 15
+
+  home = ENV['HOME'].gsub('\\', '/')
+  config.vm.synced_folder "#{home}/.docker/machine/machines", "#{home}/.docker/machine/machines"
+  config.vm.synced_folder "#{home}/.docker/contexts/meta", "#{home}/.docker/contexts/meta"
+  config.vm.synced_folder "#{home}/.docker/contexts/tls", "#{home}/.docker/contexts/tls"
+
+  # Projects in the vagrant environment will get linked to the VM so they can be accessed by Docker
+  config.vm.synced_folder "./projects","/projects"
+
+  # Packer doesn't provide a way to copy scripts to the local project folder
+  # We can't assume the location of the installed box (can we?) so here's our hack
+  config.vm.provision :shell,
+    path: "https://raw.githubusercontent.com/cagyirey/packer-windows-server/main/scripts/create-machine.ps1",
+    args: "-HostHome #{home} -MachineName windows-server-docker -Hostname {{ user `hostname` }}"
+    sha512: "2b207df36897824c5110414fbf69998231eb7bc3587331f55af2b0586af523cd6df224243522964ff7ac93791ea2006c0abaa4b0dc1261d7b988d6231dbdf6c7"
+
+  config.vm.provision :docker do |d|
+    d.build_image "/vagrant/BuildTools/.", args: "-t buildtools -m 2gb"
+  end
+
+  config.trigger.before :destroy do |trigger|
+    trigger.run_remote = { 
+      path: "https://raw.githubusercontent.com/cagyirey/packer-windows-server/main/scripts/create-machine.ps1",
+      args: "-Clean"
+      sha512: "2b207df36897824c5110414fbf69998231eb7bc3587331f55af2b0586af523cd6df224243522964ff7ac93791ea2006c0abaa4b0dc1261d7b988d6231dbdf6c7"
+    }
+  end
+
+  # TODO: review the configuration for non-parallels providers
+  config.vm.provider :parallels do |v, override|
+      v.name = "{{ user `hostname` }}" # parallels will override `config.vm.hostname` with this setting
+      v.update_guest_tools = true
+      v.memory = 2048
+      v.cpus = 2
+  end
+
+  config.vm.provider :virtualbox do |v, override|
+      v.gui = true
+      v.customize ["modifyvm", :id, "--memory", 2048]
+      v.customize ["modifyvm", :id, "--cpus", 2]
+      v.customize ["modifyvm", :id, "--vram", 128]
+      v.customize ["modifyvm", :id, "--clipboard", "bidirectional"]
+      v.customize ["setextradata", "global", "GUI/SuppressMessages", "all" ]
+  end
+
+  config.vm.provider :vmware_fusion do |v, override|
+      #v.gui = true
+      v.vmx["memsize"] = "2048"
+      v.vmx["numvcpus"] = "2"
+      v.vmx["ethernet0.virtualDev"] = "vmxnet3"
+      v.vmx["RemoteDisplay.vnc.enabled"] = "false"
+      v.vmx["RemoteDisplay.vnc.port"] = "5900"
+      v.vmx["scsi0.virtualDev"] = "lsisas1068"
+      v.vmx["virtualhw.version"] = "14"
+      v.enable_vmrun_ip_lookup = false
+      v.whitelist_verified = true
+      v.vmx["hgfs.linkRootShare"] = "FALSE"
+  end
+
+  config.vm.provider :vmware_workstation do |v, override|
+      #v.gui = true
+      v.vmx["memsize"] = "2048"
+      v.vmx["numvcpus"] = "2"
+      v.vmx["ethernet0.virtualDev"] = "vmxnet3"
+      v.vmx["RemoteDisplay.vnc.enabled"] = "false"
+      v.vmx["RemoteDisplay.vnc.port"] = "5900"
+      v.vmx["scsi0.virtualDev"] = "lsisas1068"
+      v.enable_vmrun_ip_lookup = false
+      v.whitelist_verified = true
+      v.vmx["hgfs.linkRootShare"] = "FALSE"
+  end
+
+  config.vm.provider :hyperv do |v|
+      v.cpus = 2
+      v.maxmemory = 2048
+      v.linked_clone = true
+  end
+  
+  config.vm.provider :libvirt do |libvirt|
+      libvirt.memory = 2048
+      libvirt.cpus = 2
+  end
+end

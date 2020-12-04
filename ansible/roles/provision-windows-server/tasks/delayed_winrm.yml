@@ -1,0 +1,4 @@
+- name: Set WinRM service to delayed start (to allow other VM services to load)
+  ansible.windows.win_service:
+    name: WinRM
+    start_mode: delayed

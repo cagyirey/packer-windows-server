@@ -1,0 +1,7 @@
+# docker-compose is optional in this configuration
+install_compose: false
+# vagrant will install the latest version at runtime
+install_prl_tools: false
+# in some cases, i've seen vagrant try to interact with docker before the service started
+# the shell provisioner will prevent that, but otherwise this might be required to work
+delayed_winrm: false

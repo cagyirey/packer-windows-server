@@ -1,0 +1,15 @@
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns='http://schemas.microsoft.com/developer/msbuild/2003'>
+    <PropertyGroup>
+        <VsInstallRoot>$([MSBuild]::GetVsInstallRoot())</VsInstallRoot>
+        <!-- VC Specific Paths -->
+        <VCToolsInstallDir>$([MSBuild]::GetVsInstallRoot())</VCToolsInstallDir>
+        <VCTargetsPath>$([MSBuild]::ValueOrDefault('$(VCTargetsPath)','$(MSBuildExtensionsPath32)\Microsoft\VC\v160\'))</VCTargetsPath>
+        <VCTargetsPath14>$([MSBuild]::ValueOrDefault('$(VCTargetsPath14)','$([MSBuild]::GetProgramFiles32())\MSBuild\Microsoft.Cpp\v4.0\V140\'))</VCTargetsPath14>
+        <VCTargetsPath12>$([MSBuild]::ValueOrDefault('$(VCTargetsPath12)','$([MSBuild]::GetProgramFiles32())\MSBuild\Microsoft.Cpp\v4.0\V120\'))</VCTargetsPath12>
+        <VCTargetsPath11>$([MSBuild]::ValueOrDefault('$(VCTargetsPath11)','$([MSBuild]::GetProgramFiles32())\MSBuild\Microsoft.Cpp\v4.0\V110\'))</VCTargetsPath11>
+        <VCTargetsPath10>$([MSBuild]::ValueOrDefault('$(VCTargetsPath10)','$([MSBuild]::GetProgramFiles32())\MSBuild\Microsoft.Cpp\v4.0\'))</VCTargetsPath10>
+        <AndroidTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\MDD\Android\V150\</AndroidTargetsPath>
+        <iOSTargetsPath>$(MSBuildExtensionsPath32)\Microsoft\MDD\iOS\V150\</iOSTargetsPath>
+        <VSToolsPath>$(MSBuildProgramFiles32)\MSBuild\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    </PropertyGroup>
+</Project>

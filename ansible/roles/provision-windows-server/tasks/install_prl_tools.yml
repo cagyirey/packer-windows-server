@@ -1,0 +1,5 @@
+- name: "Install Parallels Tools"
+  ansible.windows.win_package:
+    path: E:/PTAgent
+    arguments:
+    - /install_silent

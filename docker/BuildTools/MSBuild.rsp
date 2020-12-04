@@ -1,0 +1,5 @@
+/p:preferredToolArchitecture=x64
+/p:UseEnv=true
+
+# Set up MSBuild properties
+/p:CustomBeforeMicrosoftCommonProps="C:\BuildTools\MSBuild\Current\MSBuild.NetCore.Environment.Cpp.props"

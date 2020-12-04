@@ -1,0 +1,5 @@
+---
+- name: Uninstall Windows Defender
+  ansible.windows.win_feature:
+      name: Windows-Defender
+      state: absent

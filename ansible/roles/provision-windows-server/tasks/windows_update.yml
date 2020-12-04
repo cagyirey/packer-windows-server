@@ -1,0 +1,7 @@
+---
+- name: Install updates
+  win_updates:
+    
+    use_scheduled_task: yes
+    # these are the defaults, for reference
+    # category_names: ["CriticalUpdates", "SecurityUpdates", "UpdateRollups"]

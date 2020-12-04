@@ -1,0 +1,7 @@
+---
+- name: Provision Windows Server 2019 version 2004
+  hosts: all
+  tasks:
+    - include_vars: overrides.yml
+    - import_role:
+        name: provision-windows-server

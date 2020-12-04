@@ -1,0 +1,4 @@
+- name: Install PowerShell 7
+  win_chocolatey:
+    name: powershell-preview # required. Name of the package(s) to be installed.,Set to C(all) to run the action on l
+    state: latest

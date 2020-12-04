@@ -1,0 +1,5 @@
+---
+- name: Disable pagefile on C drive
+  community.windows.win_pagefile:
+    drive: C
+    state: absent

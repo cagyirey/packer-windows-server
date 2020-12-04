@@ -1,0 +1,51 @@
+---
+# Pre-Installation
+
+- name: Uninstall Windows Defender
+  import_tasks: uninstall_defender.yml
+  when: uninstall_defender is defined and uninstall_defender
+
+# Installation
+
+- name: Install Windows Updates
+  import_tasks: windows_update.yml
+  when: update_windows is defined and update_windows
+
+- name: Install Docker
+  import_tasks: install_docker.yml
+
+- name: Install docker-compose
+  import_tasks: install_docker_compose.yml
+  when: install_compose is defined and install_compose
+
+- name: Install Windows Print Server
+  import_tasks: install_print_server.yml
+  
+- name: Install Parallels Guest Tools
+  import_tasks: install_prl_tools.yml
+  when: install_prl_tools is defined and install_prl_tools
+
+- name: Install PowerShell 7
+  import_tasks: install_powershell.yml
+  when: install_powershell7 is defined and install_powershell7
+
+# Configuration
+
+- name: Set WinRM service to delayed start
+  import_tasks: delayed_winrm.yml
+  when: delayed_winrm is defined and delayed_winrm
+
+- name: Set the default shell to PowerShell
+  import_tasks: set_default_shell.yml
+  when: set_shell_powershell is defined and set_shell_powershell
+
+# Cleanup
+
+- name: Disable Pagefile
+  import_tasks: disable_pagefile.yml
+
+- name: Clean up disk
+  import_tasks: disk_cleanup.yml
+
+- name: Compact Disk
+  import_tasks: compact.yml

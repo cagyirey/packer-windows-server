@@ -1,0 +1,4 @@
+- name: Install Windows Print-Server feature
+  ansible.windows.win_feature:
+      name: Print-Server
+      state: present

@@ -1,0 +1,6 @@
+---
+- name: Consolidate free space
+  community.windows.win_defrag:
+    include_volumes: [ C ]
+    freespace_consolidation: yes
+    priority: normal

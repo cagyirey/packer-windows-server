@@ -1,0 +1,11 @@
+- name: Ensure the required NuGet package provider version is installed
+  win_shell: "Find-PackageProvider -Name Nuget -ForceBootstrap -IncludeDependencies -Force"
+
+- name: Install the Docker MSFT provider
+  community.windows.win_psmodule:
+    name: DockerMsftProvider
+    repository: PSGallery
+    state: latest
+
+- name: Install the docker engine and client
+  win_shell: "Install-Package -Name docker -ProviderName DockerMsftProvider -Force"

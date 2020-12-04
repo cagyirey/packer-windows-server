@@ -1,0 +1,10 @@
+uninstall_defender: true
+update_windows: true
+install_compose: true
+install_prl_tools: true
+install_powershell7: true
+delayed_winrm: true
+set_shell_powershell: true
+
+powershell7_path: "C:\\Program Files\\PowerShell\\7-preview\\pwsh.exe"
+powershell_path: "C:\\Windows\\System32\\powershell.exe"

@@ -1,0 +1,4 @@
+- name: Install (or upgrade) Docker Compose via chocolatey
+  win_chocolatey:
+    name: docker-compose
+    state: latest
