@@ -1,4 +1,5 @@
 /p:preferredToolArchitecture=x64
+/p:CheckMsvcComponents=false
 /p:UseEnv=true
 
 # Set up MSBuild properties
