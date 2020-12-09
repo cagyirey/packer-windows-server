@@ -1,7 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# TODO: i don't actually know what version this requires
 Vagrant.require_version ">= 1.8"
 
 Vagrant.configure("2") do |config|
